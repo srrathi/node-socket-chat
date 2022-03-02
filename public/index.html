@@ -10,7 +10,7 @@
       integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk="
       crossorigin="anonymous"
     />
-    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico" />
     <link rel="stylesheet" href="css/style.css" />
     <title>My Chat App</title>
   </head>
@@ -31,8 +31,9 @@
               required
             />
           </div>
-          <div class="form-control">
-            <label for="room">Room</label>
+          <div id="hiddenDiv"></div>
+          <div id="roomSelectDiv" class="form-control">
+            <label for="room">Public Rooms</label>
             <select name="room" id="room">
               <option value="JavaScript">JavaScript</option>
               <option value="Python">Python</option>
@@ -42,9 +43,134 @@
               <option value="Java">Java</option>
             </select>
           </div>
+          <div id="pvtRoomInputBox" class="form-control">
+            <input value="Join Private Room" type="button" onclick="joinPvtRoomFunc()" id="joinPvtRoom" class="btn">
+          </input>
+            <!-- <input
+              type="text"
+              name="room"
+              id="pvtRoomId"
+              placeholder="Enter Private Room Id..."
+              style="display: none; margin-top: 10px;"
+            /> -->
+            <input
+              onclick="createPvtRoomFunc()"
+              id="createPvtRoom"
+              class="btn"
+              type="button"
+              value="Create Private Room"
+            >
+          </input>
+          </div>
+          <div
+            style="
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+            "
+            class="form-control"
+          >
+            <p
+              style="
+                padding: 10px;
+                margin-top: 18px;
+                background-color: aliceblue;
+                color: #343434;
+                width: 40%;
+                text-align: center;
+                display: none;
+              "
+              id="createPvtRoomId"
+            ></p>
+            <input
+              style="
+                border: none;
+                padding: 10px;
+                cursor: pointer;
+                background-color: #e6e9ff;
+                color: #667aff;
+                display: none;
+              "
+              id="copyBtn"
+              type="button"
+              value="Copy Room Id"
+            >
+        </input>
+          </div>
           <button type="submit" class="btn joinBtn">Join Chat</button>
         </form>
       </main>
     </div>
   </body>
+  <script>
+    let pvtRoomId;
+
+    const setRoom = (roomId) => {
+      const input = document.createElement("input");
+      input.value = roomId;
+      input.name = "room";
+      input.style.display = "none";
+      document.getElementById("hiddenDiv").appendChild(input);
+    };
+
+    const generateRandomRoomId = (length = 5) => {
+      var result = "";
+      var characters =
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+      var charactersLength = characters.length;
+      for (var i = 0; i < length; i++) {
+        result += characters.charAt(
+          Math.floor(Math.random() * charactersLength)
+        );
+      }
+      return result;
+    };
+
+    const copyBtn = document.getElementById("copyBtn");
+    let pvtRoomIdText = document.getElementById("createPvtRoomId");
+    let selectDropdownDiv = document.getElementById("roomSelectDiv");
+    let pvtRoomInputBox = document.getElementById("pvtRoomInputBox");
+    let createPvtRoomBtn = document.getElementById("createPvtRoom");
+
+    const joinPvtRoomFunc = () => {
+      selectDropdownDiv.remove();
+      createPvtRoomBtn.remove();
+
+      const input = document.createElement("input");
+      input.id = "pvtRoomId";
+      input.name = "room";
+      input.style.marginTop = "10px";
+      input.style.padding = "5px";
+      input.style.fontSize = "16px";
+      input.style.height = "40px";
+      input.style.width = "100%";
+      input.placeholder = "Enter Private Room Id..."
+
+      document.getElementById("pvtRoomInputBox").appendChild(input);
+    };
+
+    const createPvtRoomFunc = () => {
+      pvtRoomId = generateRandomRoomId();
+      copyBtn.style.display = "block";
+      pvtRoomIdText.style.display = "block";
+      selectDropdownDiv.remove();
+      pvtRoomInputBox.remove();
+
+      setRoom(pvtRoomId);
+      console.log(pvtRoomId);
+      pvtRoomIdText.innerHTML = pvtRoomId;
+    };
+
+    copyBtn.addEventListener("click", () => {
+      navigator.clipboard.writeText(pvtRoomId).then(
+        function () {
+          alert("Room Code Copied to clipboard, Share it with your friends with whom you want to talk.");
+          console.log("Room Code Copied to clipboard");
+        },
+        function (err) {
+          console.error("Async: Could not copy text: ", err);
+        }
+      );
+    });
+  </script>
 </html>
