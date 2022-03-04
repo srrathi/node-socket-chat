@@ -1,1 +1,1 @@
-### Simple Nodejs Chat Application to learn more about socket programming
+### Simple Nodejs Chat Application using Socket.io
